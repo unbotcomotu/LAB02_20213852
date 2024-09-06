@@ -62,7 +62,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/editTextText"
+            android:id="@+id/inputText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginHorizontal="50sp"
@@ -70,11 +70,11 @@
             android:background="@android:drawable/editbox_background"
             android:ems="10"
             android:gravity="center"
-            android:inputType="text"
-            android:text="@string/inputNombre" />
+            android:hint="@string/inputNombre"
+            android:inputType="text" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/botonIniciarJuego"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="130sp"
