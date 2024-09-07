@@ -17,10 +17,10 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/monigote"
             android:layout_width="match_parent"
             android:layout_height="250dp"
-            app:srcCompat="@drawable/antenna_sinfondo" />
+            app:srcCompat="@drawable/antennatotal" />
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -41,54 +41,7 @@
             android:paddingVertical="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/letra1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="14dp"
-                android:text="E"
-                android:textAllCaps="true"
-                android:textSize="50sp" />
-
-            <TextView
-                android:id="@+id/letra2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="14dp"
-                android:text="E"
-                android:textAllCaps="true"
-                android:textSize="50sp" />
-
-            <TextView
-                android:id="@+id/letra3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="14dp"
-                android:text="E"
-                android:textAllCaps="true"
-                android:textSize="50sp" />
-
-            <TextView
-                android:id="@+id/letra4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="14dp"
-                android:text="E"
-                android:textAllCaps="true"
-                android:textSize="50sp" />
-
-            <TextView
-                android:id="@+id/letra5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="14dp"
-                android:text="E"
-                android:textAllCaps="true"
-                android:textSize="50sp" />
-
-        </LinearLayout>
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <LinearLayout
             android:id="@+id/guionesBajo"
@@ -98,54 +51,7 @@
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/guionBajo1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="10dp"
-                android:text="_"
-                android:textAllCaps="false"
-                android:textSize="80sp" />
-
-            <TextView
-                android:id="@+id/guionBajo2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="10dp"
-                android:text="_"
-                android:textAllCaps="false"
-                android:textSize="80sp" />
-
-            <TextView
-                android:id="@+id/guionBajo3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="10dp"
-                android:text="_"
-                android:textAllCaps="false"
-                android:textSize="80sp" />
-
-            <TextView
-                android:id="@+id/guionBajo4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="10dp"
-                android:text="_"
-                android:textAllCaps="false"
-                android:textSize="80sp" />
-
-            <TextView
-                android:id="@+id/guionBajo5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="10dp"
-                android:text="_"
-                android:textAllCaps="false"
-                android:textSize="80sp" />
-
-        </LinearLayout>
+            app:layout_constraintTop_toTopOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
@@ -542,7 +448,7 @@
         app:layout_constraintTop_toBottomOf="@id/contenedorLetras">
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/botonNuevoJuego"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nuevo Juego" />
