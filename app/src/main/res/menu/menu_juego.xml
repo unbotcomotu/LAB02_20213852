@@ -2,14 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/tituloAppBar"
-        android:title="@string/titulo"
-        app:showAsAction="ifRoom"/>
-    <item
         android:id="@+id/estadisticas"
         android:checkable="false"
         android:enabled="true"
-        android:icon="@drawable/statistics"
+        android:icon="@drawable/baseline_query_stats_24"
         android:title=""
         android:visible="true"
         app:showAsAction="always" />

@@ -5,5 +5,4 @@
     <string name="titulo">TeleGame</string>
     <string name="inputNombre">Ingrese su nombre</string>
     <string name="botonJugar">Jugar</string>
-
 </resources>
