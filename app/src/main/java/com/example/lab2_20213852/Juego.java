@@ -27,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -34,11 +35,12 @@ import java.util.Objects;
 public class Juego extends AppCompatActivity {
 
     List<HashMap<String, Object>> letras;
+    HashSet<String> letrasEscogidas;
     HashMap<String,Object> partida;
     List<HashMap<String,Object>>partidas;
     String nombreJugador;
     Handler handler = new Handler();
-    Integer contador = 0;
+    Integer contador;
     LinearLayout layoutLetras;
     LinearLayout layoutGuiones;
     TextView mensajeFinal;
@@ -62,7 +64,14 @@ public class Juego extends AppCompatActivity {
         layoutLetras=findViewById(R.id.letrasAdivinar);
         layoutGuiones=findViewById(R.id.guionesBajo);
 
-        inicializarPartida();
+
+        partida=(HashMap<String, Object>)intent.getSerializableExtra("partida");
+        if(partida==null){
+            inicializarPartida();
+        }else {
+            restaurarPartida();
+        }
+
 
     }
 
@@ -76,12 +85,42 @@ public class Juego extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         Integer idItem=item.getItemId();
         if(idItem==R.id.estadisticas){
+            handler.removeCallbacks(runnable);
             abrirEstadisticas();
         }
         return super.onOptionsItemSelected(item);
     }
 
+    private void restaurarPartida(){
+        layoutGuiones.removeAllViews();
+        layoutLetras.removeAllViews();
+        mensajeFinal.setTextColor(Color.TRANSPARENT);
+        letras=(List<HashMap<String, Object>>)partida.get("letras");
+        letrasEscogidas=(HashSet<String>)partida.get("letrasEscogidas");
+        contador=(Integer)partida.get("tiempo");
+        cambiarFoto((Integer) partida.get("intentos")+1);
+        partida.put("intentos",6);
+        for(int i=0;i<letras.size();i++){
+            crearNuevaLetraInvisible((char)letras.get(i).get("caracter"),i);
+        }
+        for(int i=65;i<91;i++){
+            establecerBoton((char)i);
+        }
+        for(String letraEscogida:letrasEscogidas){
+            clicarBoton(findViewById(obtenerIdIntPorIdStr(letraEscogida)),letraEscogida.toCharArray()[0]);
+        }
+
+        Button botonNuevoJuego=findViewById(R.id.botonNuevoJuego);
+        botonNuevoJuego.setOnClickListener(view -> {
+            nuevoJuego(view);
+        });
+
+        handler.post(runnable);
+    }
+
     private void inicializarPartida(){
+        contador=0;
+        letrasEscogidas=new HashSet<>();
         layoutGuiones.removeAllViews();
         layoutLetras.removeAllViews();
         mensajeFinal.setTextColor(Color.TRANSPARENT);
@@ -101,33 +140,10 @@ public class Juego extends AppCompatActivity {
             letra.put("descubierto",false);
             letras.add(letra);
         }
-        establecerBoton('A',R.id.A);
-        establecerBoton('B',R.id.B);
-        establecerBoton('C',R.id.C);
-        establecerBoton('D',R.id.D);
-        establecerBoton('E',R.id.E);
-        establecerBoton('F',R.id.F);
-        establecerBoton('G',R.id.G);
-        establecerBoton('H',R.id.H);
-        establecerBoton('I',R.id.I);
-        establecerBoton('J',R.id.J);
-        establecerBoton('K',R.id.K);
-        establecerBoton('L',R.id.L);
-        establecerBoton('M',R.id.M);
-        establecerBoton('N',R.id.N);
-        establecerBoton('O',R.id.O);
-        establecerBoton('P',R.id.P);
-        establecerBoton('Q',R.id.Q);
-        establecerBoton('R',R.id.R);
-        establecerBoton('S',R.id.S);
-        establecerBoton('T',R.id.T);
-        establecerBoton('U',R.id.U);
-        establecerBoton('V',R.id.V);
-        establecerBoton('W',R.id.W);
-        establecerBoton('X',R.id.X);
-        establecerBoton('Y',R.id.Y);
-        establecerBoton('Z',R.id.Z);
-
+        partida.put("letras",letras);
+        for(int i=65;i<91;i++){
+            establecerBoton((char)i);
+        }
 
         Button botonNuevoJuego=findViewById(R.id.botonNuevoJuego);
         botonNuevoJuego.setOnClickListener(view -> {
@@ -139,6 +155,10 @@ public class Juego extends AppCompatActivity {
 
     private void abrirEstadisticas(){
         Intent intent=new Intent(this, Estadisticas.class);
+        partida.put("enCurso",true);
+        partida.put("letrasEscogidas",letrasEscogidas);
+        partida.put("tiempo",contador);
+        intent.putExtra("partida",partida);
         intent.putExtra("partidas",(Serializable) partidas);
         intent.putExtra("nombreJugador",nombreJugador);
         setResult(RESULT_OK,intent);
@@ -171,23 +191,29 @@ public class Juego extends AppCompatActivity {
         layoutGuiones.addView(nuevoGuion);
     }
 
-    private void establecerBoton(char caracter,Integer id){
+    private void establecerBoton(char caracter){
+        Integer id=obtenerIdIntPorIdStr(String.valueOf(caracter));
         TextView boton=findViewById(id);
         boton.setAlpha(1f);
-        boton.setOnClickListener(view -> {
-            intento(caracter);
-            boton.setAlpha(0.5f);
-            boton.setOnClickListener(view1 -> {});
-        });
+        boton.setOnClickListener(view -> clicarBoton(boton,caracter));
     }
 
+    private Integer obtenerIdIntPorIdStr(String id){
+        return getResources().getIdentifier(id,"id",getPackageName());//esta función se consiguió mediante ayuda de una LLM
+    }
+
+    private void clicarBoton(TextView boton,char caracter){
+        intento(caracter);
+        boton.setAlpha(0.5f);
+        boton.setOnClickListener(view1 -> {});
+        letrasEscogidas.add(String.valueOf(caracter));
+    }
 
     private void intento(char caracter){
         Integer cantidadIntentos=(Integer)partida.get("intentos");
         Boolean acierto=false;
         for(HashMap<String,Object> letra:letras){
             if(letra.get("caracter").equals(caracter)){
-                Log.d("letraPosicion",String.valueOf((Integer)letra.get("posicion")));
                 TextView letraEncontrada=findViewById(1000+(Integer)letra.get("posicion"));
                 letraEncontrada.setTextColor(Color.BLACK);
                 letra.put("descubierto",true);
@@ -207,7 +233,6 @@ public class Juego extends AppCompatActivity {
                     totalDescubiertos++;
                 }
             }
-            Log.d("aiudaaa",String.valueOf(totalDescubiertos));
             if(totalDescubiertos==letras.size()){
                 finalizarPartida(true);
             }
@@ -223,38 +248,17 @@ public class Juego extends AppCompatActivity {
         }
         partida.put("tiempo",contador);
         handler.removeCallbacks(runnable);
-        findViewById(R.id.A).setOnClickListener(view -> {});
-        findViewById(R.id.B).setOnClickListener(view -> {});
-        findViewById(R.id.C).setOnClickListener(view -> {});
-        findViewById(R.id.D).setOnClickListener(view -> {});
-        findViewById(R.id.E).setOnClickListener(view -> {});
-        findViewById(R.id.F).setOnClickListener(view -> {});
-        findViewById(R.id.G).setOnClickListener(view -> {});
-        findViewById(R.id.H).setOnClickListener(view -> {});
-        findViewById(R.id.I).setOnClickListener(view -> {});
-        findViewById(R.id.J).setOnClickListener(view -> {});
-        findViewById(R.id.K).setOnClickListener(view -> {});
-        findViewById(R.id.L).setOnClickListener(view -> {});
-        findViewById(R.id.M).setOnClickListener(view -> {});
-        findViewById(R.id.N).setOnClickListener(view -> {});
-        findViewById(R.id.O).setOnClickListener(view -> {});
-        findViewById(R.id.P).setOnClickListener(view -> {});
-        findViewById(R.id.Q).setOnClickListener(view -> {});
-        findViewById(R.id.R).setOnClickListener(view -> {});
-        findViewById(R.id.S).setOnClickListener(view -> {});
-        findViewById(R.id.T).setOnClickListener(view -> {});
-        findViewById(R.id.U).setOnClickListener(view -> {});
-        findViewById(R.id.V).setOnClickListener(view -> {});
-        findViewById(R.id.W).setOnClickListener(view -> {});
-        findViewById(R.id.X).setOnClickListener(view -> {});
-        findViewById(R.id.Y).setOnClickListener(view -> {});
-        findViewById(R.id.Z).setOnClickListener(view -> {});
-        contador=0;
+        for(int i=65;i<91;i++){
+            findViewById(obtenerIdIntPorIdStr(String.valueOf((char)i))).setOnClickListener(view -> {});
+        }
     }
 
     private void cambiarFoto(Integer cantidadIntentos){
         ImageView imagen=findViewById(R.id.monigote);
         switch (cantidadIntentos){
+            case 7:
+                imagen.setImageResource(R.drawable.antennatotal);
+                break;
             case 6:
                 imagen.setImageResource(R.drawable.antennahead);
                 break;
@@ -280,8 +284,8 @@ public class Juego extends AppCompatActivity {
     }
 
     private void nuevoJuego(View view){
+        partida.put("letrasEscogidas",letrasEscogidas);
         partidas.add(partida);
-
         inicializarPartida();
     }
 
@@ -291,6 +295,9 @@ public class Juego extends AppCompatActivity {
         @Override
         public void run() {
             contador++;
+            if(contador==30){
+                Toast.makeText(getApplicationContext(), "¿Tanto tiempo? ¿Así quieres egresar?",Toast.LENGTH_LONG).show();
+            }
             handler.postDelayed(this, 1000);
         }
     };
