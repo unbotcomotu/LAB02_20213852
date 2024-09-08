@@ -155,7 +155,10 @@ public class Juego extends AppCompatActivity {
 
     private void abrirEstadisticas(){
         Intent intent=new Intent(this, Estadisticas.class);
-        partida.put("enCurso",true);
+        Boolean enCurso=(Boolean) partida.get("enCurso");
+        if(enCurso==null){
+            partida.put("enCurso",true);
+        }
         partida.put("letrasEscogidas",letrasEscogidas);
         partida.put("tiempo",contador);
         intent.putExtra("partida",partida);
@@ -247,6 +250,7 @@ public class Juego extends AppCompatActivity {
             mensajeFinal.setText("Perdiste :(");
         }
         partida.put("tiempo",contador);
+        partida.put("enCurso",false);
         handler.removeCallbacks(runnable);
         for(int i=65;i<91;i++){
             findViewById(obtenerIdIntPorIdStr(String.valueOf((char)i))).setOnClickListener(view -> {});

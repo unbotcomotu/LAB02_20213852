@@ -55,7 +55,7 @@ public class Estadisticas extends AppCompatActivity {
     private void generarNuevoResultadoHistorial(HashMap<String,Object> partida,Integer posicion,LinearLayout contenedor){
         TextView resultado=new TextView(this);
         Boolean enCurso=(Boolean)partida.get("enCurso");
-        if(enCurso!=null){
+        if(enCurso!=null&&enCurso){
             partida.remove("enCurso");
             resultado.setText("Juego "+(posicion+1)+": En curso");
         }else {
